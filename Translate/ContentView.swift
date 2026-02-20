@@ -43,11 +43,8 @@ struct TranslationView: View {
 					StyledTextEditor(text: .constant(!isTranslateLoading ? outputConfig.text : "..."))
 				}
 			}
-			Button(action: handleTranslateText) {
-				Text("Перевести")
-			}
 		}
-		.padding(24)
+		.padding(8)
     }
 }
 
