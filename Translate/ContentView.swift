@@ -6,19 +6,51 @@
 //
 
 import SwiftUI
+import WebKit
 
-struct ContentView: View {
+struct TranslationView: View {
+	@StateObject var inputConfig = TextConfig(lang: "auto", text: "")
+	@StateObject var outputConfig = TextConfig(lang: Lang.en.rawValue, text: "")
+	
+	@State var isTrue = true
+	
+	@State var isTranslateLoading: Bool = false
+	
+	@State private var debouncer = Debounce()
+	
+	func setTranslion(translation: String) {
+		outputConfig.text = translation
+		isTranslateLoading = false
+	}
+	
+	func handleTranslateText () {
+		isTranslateLoading = true
+		request(inputConfig.text, from: inputConfig.lang, to: outputConfig.lang, callback: setTranslion)
+	}
+	
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+		VStack {
+			HStack {
+				VStack(alignment: .leading) {
+					LanguageSelect(selectedLang: $inputConfig.lang, isEnabledAuto: true)
+					StyledTextEditor(text: $inputConfig.text)
+						.onChange(of: inputConfig.text) {
+							debouncer.debounce(action: handleTranslateText)
+						}
+				}
+				VStack(alignment: .leading) {
+					LanguageSelect(selectedLang: $outputConfig.lang)
+					StyledTextEditor(text: .constant(!isTranslateLoading ? outputConfig.text : "..."))
+				}
+			}
+			Button(action: handleTranslateText) {
+				Text("Перевести")
+			}
+		}
+		.padding(24)
     }
 }
 
 #Preview {
-    ContentView()
+	TranslationView()
 }

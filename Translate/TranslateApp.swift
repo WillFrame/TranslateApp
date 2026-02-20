@@ -11,7 +11,11 @@ import SwiftUI
 struct TranslateApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+			TranslationView()
         }
     }
 }
+
+//#Preview {
+//	TranslateApp()
+//}
