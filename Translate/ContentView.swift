@@ -24,8 +24,17 @@ struct TranslationView: View {
 	}
 	
 	func handleTranslateText () {
-		isTranslateLoading = true
-		request(inputConfig.text, from: inputConfig.lang, to: outputConfig.lang, callback: setTranslion)
+		if inputConfig.text != "" {
+			isTranslateLoading = true
+			request(
+				inputConfig.text.trimmingCharacters(in: .whitespacesAndNewlines),
+				from: inputConfig.lang,
+				to: outputConfig.lang,
+				callback: setTranslion
+			)
+		} else {
+			outputConfig.text = ""
+		}
 	}
 	
     var body: some View {

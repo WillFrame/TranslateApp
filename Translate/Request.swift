@@ -37,7 +37,8 @@ func parseTranslation(from jsonString: String) -> String? {
 }
 
 func request(_ input: String, from: String = "auto", to lang: String, callback: @escaping (String) -> Void, ) {
-	let body = #"[[["MkEWBc","[[\"\#(input)\",\"\#(from)\",\"\#(lang)\",1],[]]",null,"generic"]]]"#
+	let preparedInput = input.replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: ".", with: " ");
+	let body = #"[[["MkEWBc","[[\"\#(preparedInput)\",\"\#(from)\",\"\#(lang)\",1],[]]",null,"generic"]]]"#
 	let parameters = "f.req=\(body.addingPercentEncoding(withAllowedCharacters: .alphanumerics)!)"
 	let postData =  parameters.data(using: .utf8)
 
@@ -52,11 +53,14 @@ func request(_ input: String, from: String = "auto", to lang: String, callback: 
 	let task = URLSession.shared.dataTask(with: request) { data, response, error in
 		guard let data = data else {return}
 		var string = String(data: data, encoding: .utf8)!
+		
 		string.removeFirst(6)
 		
-		let output = parseTranslation(from: string)
+		let output = parseTranslation(from: string) ?? ""
 		
-		callback((output != nil) ? output! : "")
+		print(output)
+		
+		callback(output)
 	}
 
 	task.resume()
