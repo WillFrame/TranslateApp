@@ -12,7 +12,7 @@ struct TranslateApp: App {
     var body: some Scene {
 		MenuBarExtra("Tranlsation App", systemImage: "hammer") {
 			TranslationView()
-				.frame(width: 400, height: 150)
+				.frame(width: 400, height: 130)
 		}
 		.menuBarExtraStyle(.window)
 	}

@@ -13,7 +13,9 @@ struct StyledTextEditor: View {
 	var body: some View {
 		TextEditor(text: $text)
 			.frame(height: 80)
-			.cornerRadius(12)
+			.background(.windowBackground)
+			.border(.ultraThickMaterial, width: 2)
+			.cornerRadius(6)
 			.font(.system(size: 18))
 	}
 }
